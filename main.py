@@ -1,16 +1,15 @@
-# This is a sample Python script.
+from scipy.optimize import minimize
+import numpy as np
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# We want to minimize ||f(x)-xinit|| subject to f(x) = 0
 
+f = (-4*x[0])**2 + (3*x[0]-x[1]-2)**2 + (x[1]-1)**2 + (x[0]-1)**2
+# the euclidean norm of f-xinit
+objfun = lambda x, xinit: np.sqrt(np.sum((f(x)-xinit)**2))
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# initial guess
+xinit = [1, 1]
+# constraint f(x) = 0:
+constr = {"type": "eq", "fun": f}
+res= minimize(fun=objfun, args=(xinit,), x0=xinit, constraints=constr)
+print(res.x)
